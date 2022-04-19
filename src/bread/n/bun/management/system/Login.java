@@ -4,18 +4,44 @@
  */
 package bread.n.bun.management.system;
 
+import dao.UserDao;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import model.User;
+
 /**
  *
  * @author Ron Carl
  */
 public class Login extends javax.swing.JFrame {
+    public String emailPattern = "^[a-zA-Z0-9]+[@]+[a-zA-Z0-9]+[.]+[a-zA-Z0-9]+$";
 
     /**
      * Creates new form Login
      */
     public Login() {
         initComponents();
+        btnLogin.setEnabled(false);
     }
+    
+    public void clear(){
+        txtUserName.setText("");
+        txtPassword.setText("");
+        btnLogin.setEnabled(false);        
+    }
+    
+    public void validateFields(){
+        String userName = txtUserName.getText();
+        String password = txtPassword.getText();
+        if(!userName.equals("") && !password.equals("")){
+             btnLogin.setEnabled(true);
+        }
+        else{
+            btnLogin.setEnabled(false);
+        }
+    }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -28,9 +54,9 @@ public class Login extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        txtUser = new javax.swing.JTextField();
+        txtUserName = new javax.swing.JTextField();
         txtPassword = new javax.swing.JPasswordField();
-        jButton1 = new javax.swing.JButton();
+        btnLogin = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -50,17 +76,39 @@ public class Login extends javax.swing.JFrame {
         jLabel2.setForeground(new java.awt.Color(102, 102, 0));
         jLabel2.setText("Password");
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 460, -1, 45));
-        getContentPane().add(txtUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 330, 370, 45));
+
+        txtUserName.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtUserNameKeyReleased(evt);
+            }
+        });
+        getContentPane().add(txtUserName, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 330, 370, 45));
+
+        txtPassword.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtPasswordKeyReleased(evt);
+            }
+        });
         getContentPane().add(txtPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 500, 380, 45));
 
-        jButton1.setBackground(new java.awt.Color(102, 102, 0));
-        jButton1.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
-        jButton1.setText("LOGIN");
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 580, -1, 34));
+        btnLogin.setBackground(new java.awt.Color(102, 102, 0));
+        btnLogin.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
+        btnLogin.setText("LOGIN");
+        btnLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLoginActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 580, -1, 34));
 
         jButton2.setBackground(new java.awt.Color(102, 102, 0));
         jButton2.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
         jButton2.setText("SIGNUP");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 580, -1, 34));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 40)); // NOI18N
@@ -75,6 +123,11 @@ public class Login extends javax.swing.JFrame {
 
         jButton3.setBackground(new java.awt.Color(0, 0, 0));
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/exit .png"))); // NOI18N
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1290, 10, 60, 40));
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/login background.png"))); // NOI18N
@@ -83,6 +136,52 @@ public class Login extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        int a = JOptionPane.showConfirmDialog(null, "Do you really want to Close Application","Select",JOptionPane.YES_NO_OPTION);
+        if (a==0)
+        {
+            System.exit(0);
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
+        // TODO add your handling code here:
+        String userName = txtUserName.getText();
+        String password = txtPassword.getText();
+        User user = null;
+        user = UserDao.login(userName, password);
+        if(user == null)
+            JOptionPane.showMessageDialog(null,"<html><b style=\"color:red\">Incorrect Username or Password</b></html>","Message",JOptionPane.ERROR_MESSAGE);
+        else{
+            if(user.getStatus().equals("false")){
+                ImageIcon icon = new ImageIcon();
+                JOptionPane.showMessageDialog(null,"<html><b>Wait for Admin Approval</b></html>","Message",JOptionPane.INFORMATION_MESSAGE,icon);
+                clear();
+            }
+            if(user.getStatus().equals("true")){
+                setVisible(false);
+                new Home(userName).setVisible(true);
+            }
+        }
+    }//GEN-LAST:event_btnLoginActionPerformed
+
+    private void txtUserNameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUserNameKeyReleased
+        // TODO add your handling code here:
+        validateFields();
+    }//GEN-LAST:event_txtUserNameKeyReleased
+
+    private void txtPasswordKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPasswordKeyReleased
+        // TODO add your handling code here:
+        validateFields();
+    }//GEN-LAST:event_txtPasswordKeyReleased
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        setVisible(false);
+        new Signup().setVisible(true);
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -120,7 +219,7 @@ public class Login extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnLogin;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
@@ -129,6 +228,6 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPasswordField txtPassword;
-    private javax.swing.JTextField txtUser;
+    private javax.swing.JTextField txtUserName;
     // End of variables declaration//GEN-END:variables
 }

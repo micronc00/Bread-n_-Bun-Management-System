@@ -4,6 +4,8 @@
  */
 package bread.n.bun.management.system;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Ron Carl
@@ -187,10 +189,20 @@ public class BreadnBunPOS extends javax.swing.JFrame {
 
         jButton14.setBackground(new java.awt.Color(0, 0, 0));
         jButton14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/20220330_095642.png"))); // NOI18N
+        jButton14.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton14ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton14, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 55, 39));
 
         jButton15.setBackground(new java.awt.Color(0, 0, 0));
         jButton15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/exit .png"))); // NOI18N
+        jButton15.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton15ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton15, new org.netbeans.lib.awtextra.AbsoluteConstraints(1300, 10, 55, 40));
 
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/ui design main.png"))); // NOI18N
@@ -199,6 +211,20 @@ public class BreadnBunPOS extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton15ActionPerformed
+        // TODO add your handling code here:
+        int a = JOptionPane.showConfirmDialog(null, "Do you really want to Close Application", "Select", JOptionPane.YES_NO_OPTION);
+        if (a == 0) {
+            System.exit(0);
+        }
+    }//GEN-LAST:event_jButton15ActionPerformed
+
+    private void jButton14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton14ActionPerformed
+        // TODO add your handling code here:
+        setVisible(false);
+        new Home().setVisible(true);
+    }//GEN-LAST:event_jButton14ActionPerformed
 
     /**
      * @param args the command line arguments
