@@ -15,8 +15,10 @@ public class tables {
         try{
             String userTable = "create table user(id int AUTO_INCREMENT primary key,name varchar(20),mobileNumber varchar(11),birthDate varchar(20),email varchar(20),position varchar(20),userName varchar(20),password varchar(20),status varchar(20),UNIQUE (email))";
             String adminDetails = "insert into user(name,mobileNumber,birthDate,email,position,userName,password,status) values('Admin','09387106780','November','admin@gmail.com','Cashier','admin','admin','true')";
+            String productTable = "create table product(productName varchar(50),price varchar(50),quantity varchar(50),dateManufactured varchar(50),expirationDate varchar(50))";    
             DbOperations.setDataOrDelete(userTable, "User Table Created Successfully");
-            DbOperations.setDataOrDelete(adminDetails, "Admin Details Added Succesfully");
+            DbOperations.setDataOrDelete(adminDetails, "Admin Details Added Successfully");
+            DbOperations.setDataOrDelete(productTable, "Product Table Created Successfully");
         }
         catch(Exception e){
             JOptionPane.showMessageDialog(null,e);

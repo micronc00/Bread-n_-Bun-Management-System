@@ -77,6 +77,7 @@ public class Login extends javax.swing.JFrame {
         jLabel2.setText("Password");
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 460, -1, 45));
 
+        txtUserName.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         txtUserName.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtUserNameKeyReleased(evt);
@@ -84,6 +85,7 @@ public class Login extends javax.swing.JFrame {
         });
         getContentPane().add(txtUserName, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 330, 370, 45));
 
+        txtPassword.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         txtPassword.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtPasswordKeyReleased(evt);

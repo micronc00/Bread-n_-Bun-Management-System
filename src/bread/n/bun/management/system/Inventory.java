@@ -4,7 +4,14 @@
  */
 package bread.n.bun.management.system;
 
+import model.Product;
+import dao.ProductDao;
+import java.util.ArrayList;
+import java.util.Iterator;
 import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -29,57 +36,59 @@ public class Inventory extends javax.swing.JFrame {
     private void initComponents() {
 
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
+        txtSearch = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                formComponentShown(evt);
+            }
+        });
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jButton1.setBackground(new java.awt.Color(0, 0, 0));
         jButton1.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
         jButton1.setForeground(new java.awt.Color(255, 232, 202));
         jButton1.setText("Edit");
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 550, -1, 40));
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 600, -1, 40));
 
-        jButton2.setBackground(new java.awt.Color(0, 0, 0));
-        jButton2.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
-        jButton2.setForeground(new java.awt.Color(255, 232, 202));
-        jButton2.setText("Search");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        txtSearch.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        txtSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                txtSearchActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 550, -1, 40));
-
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+        txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtSearchKeyReleased(evt);
             }
         });
-        getContentPane().add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 550, 400, 40));
+        getContentPane().add(txtSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 600, 400, 40));
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {"1001", "Flour", "10"},
-                {"1002", "Sugar", "5"},
-                {"1003", "Egg", "20"},
-                {null, null, null}
+
             },
             new String [] {
-                "Supply ID", "Supply Name", "Available Stock"
+                "Product Name", "Price", "Quantity", "Date Manufactured", "Expiration Date"
             }
         ));
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 230, 774, 246));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 210, 1120, 360));
 
         jButton3.setBackground(new java.awt.Color(0, 0, 0));
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/20220330_095642.png"))); // NOI18N
@@ -101,22 +110,18 @@ public class Inventory extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 35)); // NOI18N
         jLabel2.setText("INVENTORY");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 70, -1, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 100, -1, -1));
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/ui design main.png"))); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel3.setText("Search");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 610, -1, -1));
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/20220330_122338.png"))); // NOI18N
         jLabel1.setText("jLabel1");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
@@ -131,6 +136,34 @@ public class Inventory extends javax.swing.JFrame {
         setVisible(false);
         new Home().setVisible(true);
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
+        // TODO add your handling code here:
+        DefaultTableModel dtm = (DefaultTableModel) jTable1.getModel();
+        ArrayList<Product> list = ProductDao.getAllRecords();
+        Iterator<Product> itr = list.iterator();
+        while (itr.hasNext()) {
+            Product productObj = itr.next();
+            dtm.addRow(new Object[]{productObj.getProductName(),productObj.getPrice(),productObj.getQuantity(),productObj.getDateManufactured(),productObj.getExpirationDate()});
+        }
+    }//GEN-LAST:event_formComponentShown
+
+    private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased
+        // TODO add your handling code here:
+        DefaultTableModel table = (DefaultTableModel)jTable1.getModel();
+        String search = txtSearch.getText().toLowerCase();
+        TableRowSorter<DefaultTableModel> tr = new TableRowSorter<DefaultTableModel>(table);
+        jTable1.setRowSorter(tr);
+        tr.setRowFilter(RowFilter.regexFilter(search));
+    }//GEN-LAST:event_txtSearchKeyReleased
+
+    private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSearchActionPerformed
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTable1MouseClicked
 
     /**
      * @param args the command line arguments
@@ -169,13 +202,13 @@ public class Inventory extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
 }
